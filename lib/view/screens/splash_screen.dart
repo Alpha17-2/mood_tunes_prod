@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mood_tunes_prod/utils/device_size.dart';
+import 'package:mood_tunes_prod/view/screens/home_screen.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    navigate();
+  }
+
+  navigate() async {
+    final nav = Navigator.of(context);
+    await Future.delayed(Duration(seconds: 3));
+    nav.pushReplacement(MaterialPageRoute(
+      builder: (context) => HomeScreen(),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage(
+                    "assets/splash3.jpeg",
+                  ),
+                  fit: BoxFit.cover)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                "Mood Tunes",
+                style: GoogleFonts.roboto(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30),
+              ),
+              SizedBox(
+                height: displayHeight(context) * 0.2,
+              ),
+            ],
+          )),
+    );
+  }
+}
