@@ -2,36 +2,13 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 
 import 'package:just_audio/just_audio.dart';
+import 'package:mood_tunes_prod/models/audio_model.dart';
 import 'package:mood_tunes_prod/utils/device_size.dart';
 import 'package:rxdart/rxdart.dart';
 import 'dart:math';
 
-class AudioList {
-  AudioList({
-    required this.id,
-    required this.title,
-    required this.audioUrl,
-  });
-
-  String id;
-  String title;
-  String audioUrl;
-
-  factory AudioList.fromJson(Map<String, dynamic> json) => AudioList(
-        id: json["id"],
-        title: json["title"],
-        audioUrl: json["audio_url"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "audio_url": audioUrl,
-      };
-}
-
 class MusicScreen extends StatefulWidget {
-  final List<AudioList> audioClips;
+  final List<Audio> audioClips;
   final String mood;
 
   MusicScreen({required this.audioClips, required this.mood});
@@ -47,15 +24,14 @@ class _MusicScreenState extends State<MusicScreen> {
   void initState() {
     for (int i = 0; i < widget.audioClips.length; ++i) {
       String audioClipUrl = widget.audioClips[i].audioUrl;
+      String title = widget.audioClips[i].title;
 
       setState(() {
         _playlist.add(
           AudioSource.uri(
             Uri.parse(audioClipUrl),
             tag: AudioMetadata(
-                album: "Song",
-                title: "Some title",
-                artwork: "assets/music/1.jpeg"),
+                album: "Song", title: title, artwork: "assets/music/1.jpeg"),
           ),
         );
       });
@@ -117,9 +93,8 @@ class _MusicScreenState extends State<MusicScreen> {
                             )),
                           ),
                         ),
-                        Text(metadata.album!,
-                            style: Theme.of(context).textTheme.headline6),
-                        Text(metadata.title!),
+                        Text(metadata.title!,
+                            style: Theme.of(context).textTheme.displaySmall),
                       ],
                     );
                   }
@@ -237,9 +212,9 @@ class _MusicScreenState extends State<MusicScreen> {
                               ? Colors.grey.shade300
                               : null,
                           child: ListTile(
-                            leading: const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage("assets/music/2.jpeg"),
+                            leading: CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  "assets/music/${(i % 5) + 1}.jpeg"),
                             ),
                             title: Text(sequence[i].tag.title as String),
                             onTap: () {

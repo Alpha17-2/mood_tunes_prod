@@ -1,7 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mood_tunes_prod/models/audio_model.dart';
+import 'package:mood_tunes_prod/utils/api_responses.dart';
 import 'package:mood_tunes_prod/utils/device_size.dart';
 import 'package:mood_tunes_prod/view/screens/music_screen.dart';
 import 'package:tflite_v2/tflite_v2.dart';
@@ -39,15 +40,11 @@ class _MoodRecognitionScreenState extends State<MoodRecognitionScreen> {
   Future detectMood(File image) async {
     int startTime = DateTime.now().millisecondsSinceEpoch;
 
-    // String bestMood = "Neutral";
     var recognitions = await Tflite.runModelOnImage(
-        path: image.path, numResults: 6, threshold: 0.08, imageMean: 127.5);
-    if (recognitions != null && recognitions.length > 1) {
+        path: image.path, numResults: 6, threshold: 0.01, imageMean: 127.5);
+    if (recognitions != null) {
       debugPrint(recognitions.toString());
-
-      bestMood = recognitions[1]["label"].toString().split(" ").last;
-      if (bestMood == "Neutral")
-        bestMood = recognitions[0]["label"].toString().split(" ").last;
+      bestMood = recognitions[0]["label"].toString().split(" ").last;
     }
     debugPrint("Final emotion = $bestMood");
     setState(() {});
@@ -119,20 +116,14 @@ class _MoodRecognitionScreenState extends State<MoodRecognitionScreen> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MusicScreen(
-                                  mood: bestMood,
-                                  audioClips: [
-                                    AudioList(
-                                        id: "id",
-                                        title: "title",
-                                        audioUrl:
-                                            "https://firebasestorage.googleapis.com/v0/b/mood-tunes-56abd.appspot.com/o/Senorita-Shawn-Mendes(PaglaSongs).mp3?alt=media&token=a5870e12-e632-48c9-9111-14f32cc35196"),
-                                  ],
-                                )));
+                  onTap: () async {
+                    final nav = Navigator.of(context);
+                    List<Audio> clips = await getSongsBasedOnMood(bestMood);
+                    nav.push(MaterialPageRoute(
+                        builder: (context) => MusicScreen(
+                              mood: bestMood,
+                              audioClips: clips,
+                            )));
                   },
                   child: Card(
                     shape: RoundedRectangleBorder(

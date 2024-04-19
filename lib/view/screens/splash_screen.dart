@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mood_tunes_prod/utils/device_size.dart';
+import 'package:mood_tunes_prod/view/screens/add_music.dart';
 import 'package:mood_tunes_prod/view/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -35,18 +38,31 @@ class _SplashScreenState extends State<SplashScreen> {
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                    "assets/splash3.jpeg",
+                    "assets/splash4.jpeg",
                   ),
                   fit: BoxFit.cover)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Stack(
             children: [
-              Text(
-                "Mood Tunes",
-                style: GoogleFonts.roboto(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30),
+              Positioned(
+                  top: displayHeight(context) * 0.15,
+                  left: 0,
+                  right: 0,
+                  child: Image.asset(
+                    "assets/logo.jpeg",
+                    height: 120,
+                  )),
+              Positioned(
+                top: displayHeight(context) * 0.5,
+                left: 0,
+                right: 0,
+                child: Text(
+                  "Mood Tunes",
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.roboto(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30),
+                ),
               ),
               SizedBox(
                 height: displayHeight(context) * 0.2,
