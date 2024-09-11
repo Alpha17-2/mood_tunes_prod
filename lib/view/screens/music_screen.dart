@@ -167,7 +167,7 @@ class _MusicScreenState extends State<MusicScreen> {
                 Expanded(
                   child: Text(
                     "${widget.mood} Playlist",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -428,7 +428,7 @@ class _SeekBarState extends State<SeekBar> {
                       .firstMatch("$_remaining")
                       ?.group(1) ??
                   '$_remaining',
-              style: Theme.of(context).textTheme.caption),
+              style: Theme.of(context).textTheme.bodyMedium),
         ),
       ],
     );
